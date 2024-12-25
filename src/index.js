@@ -11,7 +11,7 @@ import announce from "./routes/announce.route.js"
 
 dotenv.config();
 
-app.use(cors({origin:"http://localhost:5173",credentials:true,methods:['GET','POST','DELETE','PUT']}));
+app.use(cors({origin:"*",credentials:true,methods:['GET','POST','DELETE','PUT']}));
 
 
 server.listen(3000, () => {
