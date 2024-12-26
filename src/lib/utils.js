@@ -7,6 +7,6 @@ export const generatetoken =(userId,res)=>{
         expiresIn:"7d",
         
     })
-    res.cookie("jwt",token,{maxAge:7*24*60*60*1000,secure:true,httpOnly:true,SameSite:"None"})
+    res.cookie("jwt",token,{maxAge:7*24*60*60*1000,secure:true,httpOnly:true,SameSite:'None'})
     return token;
 }
