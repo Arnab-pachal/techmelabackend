@@ -1,10 +1,12 @@
-import express from "express"
-import { updateProfile,checkAuth,login,signup,logout } from "../controllers/auth.controller.js"
-import { protectRoute } from "../middleware/auth.middleware.js"
-import { getUsersForSidebar,getMessages,sendMessages,deletemsg} from "../controllers/message.controller.js"
-const router = express.Router()
-router.get("/",getMessages)
-router.get("/users",getUsersForSidebar)
-router.post("/send",sendMessages);
-router.delete("/delete/:id",deletemsg);
+import express from "express";
+import { protectRoute } from "../middleware/auth.middleware.js";
+import { getMessages, getUsersForSidebar, sendMessage,deleteMessage } from "../controllers/message.controller.js";
+
+const router = express.Router();
+
+router.get("/users", protectRoute, getUsersForSidebar);
+router.get("/:id", protectRoute, getMessages);
+router.post("/send/:id", protectRoute, sendMessage);
+router.delete("/delete/:id",protectRoute,deleteMessage)
+
 export default router;
