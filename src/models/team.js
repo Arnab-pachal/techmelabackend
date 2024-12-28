@@ -1,6 +1,6 @@
 import mongoose  from "mongoose";
 const Team = new mongoose.Schema({
-       teamName :{
+    teamName :{
         type:String,
         required:true,
         unique:true,

@@ -3,8 +3,10 @@ import User1 from "../models/userschema.js";
 import bcrypt from "bcryptjs"
 import { generatetoken } from "../lib/utils.js";
 import cloudinary from "../lib/cloudinary.js";
+
+
 export const signup = async(req,res)=>{
-    const {fullName,password}=req.body;
+    const {fullName,password,email}=req.body;
     console.log(req.body)
     try{
            if(password.length==0){
@@ -19,7 +21,8 @@ export const signup = async(req,res)=>{
                 const hashedPassword =await bcrypt.hash(password,salt);
                 const newUser = new User1({
                     fullName:fullName,
-                    password:hashedPassword
+                    password:hashedPassword,
+                    email:email
                 })
                 if(newUser){
                     console.log(newUser)
@@ -28,6 +31,7 @@ export const signup = async(req,res)=>{
                     res.status(200).json({
                     _id : newUser._id,
                     fullName:fullName,
+                    email:email,
                     password:hashedPassword,
                     profilePic:newUser.profilePic,
                     })
@@ -50,7 +54,7 @@ export const login = async(req,res)=>{
     console.log(req.body)
     try{
         const expUser = await User1.findOne({fullName:fullName});
-        console.log(expUser);
+        console.log("exp user is :",expUser);
        
        const isPasswordCorrect =  await bcrypt.compare(password,expUser.password);
        if(!isPasswordCorrect){res.status(400).json({message:"Invalid Credentials"});}
@@ -60,6 +64,7 @@ export const login = async(req,res)=>{
             id : expUser._id,
             fullName:expUser.fullName,
             profilePic:expUser.profilePic,
+            email:expUser.email
         })
        }
     }
@@ -81,7 +86,7 @@ export const logout = (req,res)=>{
     }
     }
 
-    export const updateProfile = async(req,res)=>{
+    export const updateProfilepic = async(req,res)=>{
         try{
             const {profilePic} =req.body;
             
@@ -98,11 +103,13 @@ export const logout = (req,res)=>{
             res.status(500).json({message:"Internal Server Error"});
         }
         }
- export const updateName = async(req,res)=>{
+ export const updateProfile = async(req,res)=>{
     try{
-        const {id,name}=req.body;
+        const {id,name,password}=req.body;
         console.log(req.body);
-        const Profile = await User1.findByIdAndUpdate(id,{fullName: name},{new:true});
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword =await bcrypt.hash(password,salt);
+        const Profile = await User1.findByIdAndUpdate(id,{fullName: name,password:hashedPassword},{new:true});
         console.log(Profile) 
         res.status(200).json(Profile)
 
@@ -111,7 +118,6 @@ export const logout = (req,res)=>{
         res.status(500).json({message:"Internal Server Error"});
     }
  }
-
         export const checkAuth = (req,res)=>{
             try{
                 console.log(req.user)
@@ -133,3 +139,6 @@ catch(e){
     res.status(500).json({message :"Internal Server Error"});
 }
  }
+
+
+ 
