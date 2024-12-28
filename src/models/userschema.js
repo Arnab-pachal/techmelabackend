@@ -3,8 +3,12 @@ const userSchema = new mongoose.Schema({
     fullName:{
         type:String,
         required:true,
-    }
-    ,
+    },
+    TeamName :{
+        type:String,
+        default:""
+    },
+    
     password:{
         type:String,
         required :true,

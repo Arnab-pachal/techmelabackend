@@ -1,4 +1,4 @@
-import express from "express"
+import express, { json } from "express"
 import User1 from "../models/userschema.js";
 import bcrypt from "bcryptjs"
 import { generatetoken } from "../lib/utils.js";
@@ -122,3 +122,14 @@ export const logout = (req,res)=>{
                 res.status(500).json({message:"Internal Server Error"});
             }
         }
+ export const allUser = async(req,res)=>{
+    try{
+    let alluser = await User1.find({});
+    console.log(alluser)
+    res.status(200).json(alluser)
+}
+catch(e){
+    console.log(e);
+    res.status(500).json({message :"Internal Server Error"});
+}
+ }
